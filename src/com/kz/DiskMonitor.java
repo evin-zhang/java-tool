@@ -16,28 +16,32 @@ import javax.mail.internet.MimeMessage;
 public class DiskMonitor {
 
     public static void main(String[] args) throws Exception {
+        if(args.length==0){
+            System.out.println("请输入参数,参数0=阈值,参数1=mail supplier such as 126 ,参数2= mail from,参数3=mail password,参数4= mail to ");
+        }
         // 设定阈值
-        long threshold = 10L;
-
+        long threshold = Long.valueOf(args[0]);
         // 邮件信息
         String subject = "磁盘使用量超过阈值警报";
         String content = "";
         // SMTP服务器信息
-        String smtpHost = "smtp.126.com";
+        String smtpHost = "smtp."+args[1]+".com";
         int smtpPort = 587;
 
         // 发件人和收件人信息
-        String from = "xxx@126.com";
-        String password = "sssss";
-        String to = "xxxxxxx";
+        String from = args[2];
+        String password = args[3];
+        String to = args[4];
 
         // 邮件发送相关配置
         Properties props = new Properties();
         props.put("mail.smtp.host", smtpHost);
         props.put("mail.smtp.port", smtpPort);
         props.put("mail.smtp.auth", "true");
-
+        props.put("mail.smtp.ssl.enable", "true");
         props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.starttls.required", "true");
+
         Session session = Session.getInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(from, password);
